@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block main %}
+
+{% if user.is_active %}
+<a href={% url 'post'%}><button type='button'>글쓰기</button></a>
+{% endif%}
+{% for post in posts %}
+    <li>
+        <a href="{% url 'post_detail' post.idx %}">
+            <h2>{{ post.title }}</h2>
+        </a>
+        <h3>{{ post.created_at|date:'Y/n/j A g:i' }} 
+        <br/>
+        {% for tag in post.tags %}
+        #<a href="./?tag={{tag}}">{{tag}}</a>,
+        {% endfor %}
+        <h3>
+        <p>{{ post.content|slice:'0:180'}}...</p>
+    </li>
+{% endfor %} 
+<div class="page-navigator">
+    {% if tag %}
+        {% if page > 1 %}
+            <a href="./?page={{page|add:-1}}&tag={{tag}}">이전</a>
+        {% endif %}
+        <a>{{ page }}</a>
+        {% if length > length_page %}
+        <a href="./?page={{page|add:1}}&tag={{tag}}">다음</a>
+        {% endif %}
+    {% else %}
+        {% if page > 1 %}
+            <a href="./?page={{page|add:-1}}">이전</a>
+        {% endif %}
+        <a>{{ page }}</a>
+        {% if length > length_page %}
+        <a href="./?page={{page|add:1}}">다음</a>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock main %}
